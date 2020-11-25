@@ -1,9 +1,6 @@
 <template>
   <div class="coins-tabel">
-<!--   <h1>Coin tabel</h1>-->
-    <div>{{itemsCoin}}</div>
-    <b-table striped hover  :fields="fields" :items="itemsCoin">
-
+    <b-table striped hover :items="itemsCoin">
     </b-table>
   </div>
 </template>
@@ -12,18 +9,31 @@
 // import axios from "axios"
 export default {
   name: "coins-tabel",
-  props:['coinsList'],
-  data(){
-    return{
-      itemsCoin:[]
+  props: ['coinsList'],
+  watch: {
+    coinsList: function (val) {
+      this.formatDataToTabel()
+    }
+  },
+  data() {
+    return {
+      itemsCoin: []
     }
   },
   methods: {
-    formatDataToTabel(){
-      this.itemsCoin =  this.coinsList.map((item, index) => ({id: index + 1, Name: item.FullName, label: item.Name, }))
+    formatDataToTabel() {
+      this.itemsCoin = this.coinsList.map((item, index) => ({
+        '#': index + 1,
+        Name: item.FullName,
+        Value: item.Name,
+        price: item.value['PRICE'] || ' ~ ',
+        'Volume 24h':item.value['VOLUME24HOUR'],
+        'Top tier volume 24h': item.value['TOPTIERVOLUME24HOUR'],
+        'Currency': item.value['TOSYMBOL']
+      }))
     }
   },
-  created () {
+  created() {
     this.formatDataToTabel()
   },
 };
