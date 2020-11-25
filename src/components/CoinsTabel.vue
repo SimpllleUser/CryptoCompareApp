@@ -1,6 +1,5 @@
 <template>
   <div class="coins-tabel">
-    <img src='www.cryptocompare.com/media/1383672/usdt.png' height="100" width="100" alt=""/>
     <b-table striped hover :items="itemsCoin" :fields="fields">
       <template v-slot:cell(Name)="data">
         <a :href="`{data.item.Name}`">{{ data.item.Name}}</a>
@@ -80,7 +79,6 @@ export default {
         'Top tier volume 24h': item.value['TOPTIERVOLUME24HOUR'] || ' ~ ',
         'Currency': item.value['TOSYMBOL']
       }))
-      console.log(this.coinsList)
     }
   },
   created() {
