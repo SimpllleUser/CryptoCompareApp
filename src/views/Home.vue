@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    {{items}}
     {{ allData.length > 10 && JSON.parse(allData) }}
     <coins-tabel :coinsList="coinsList"/>
   </div>
@@ -23,6 +24,7 @@ export default {
       // API_URL:"https://min-api.cryptocompare.com/data/top/totalvolfull?limit=10&tsym=USD&api_key=",
       coinsList: [],
       allData: {},
+      items:[],
       paramsCoinsWS: []
     }
   },
@@ -40,7 +42,7 @@ export default {
       } catch (err) {
         console.log('err /n get coinsList', err)
       }
-      console.log('coinsList', this.coinsList)
+      // console.log('coinsList', this.coinsList)
     },
     initialData() {
       const ccStreamer = new WebSocket('wss://streamer.cryptocompare.com/v2?api_key=' + this.KEY);
@@ -55,7 +57,9 @@ export default {
       ccStreamer.onmessage = function onStreamMessage(message) {
         var message = event.data;
         v.allData = event.data
-        console.log(message);
+        let coinname = JSON.parse(v.allData)['FROMSYMBOL']
+        v.items[`${coinname}`] = JSON.parse( v.allData) || {}
+        console.log('v.items',v.items)
       }
     },
   },
