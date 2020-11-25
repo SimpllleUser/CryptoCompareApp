@@ -2,7 +2,7 @@
   <div class="coins-tabel">
     <b-table striped hover :items="itemsCoin" :fields="fields">
       <template v-slot:cell(Name)="data">
-        <a :href="`{data.item.Name}`">{{ data.item.Name}}</a>
+        <router-link :to="'detail/'+data.item.Value">{{ data.item.Name}}</router-link>
       </template>
       <template v-slot:cell(icon)="data">
         <img :src="'https://www.cryptocompare.com' + data.item.icon " alt="icon" width="35" height="35"/>
@@ -18,6 +18,7 @@ export default {
   props: ['coinsList'],
   watch: {
     coinsList: function (val) {
+      console.log('val',val)
       this.formatDataToTabel()
     }
   },
@@ -69,7 +70,7 @@ export default {
   },
   methods: {
     formatDataToTabel() {
-      this.itemsCoin = this.coinsList.map((item, index) => ({
+      this.itemsCoin = this.coinsList && this.coinsList.map((item, index) => ({
         '#': index + 1,
         icon:item.ImageUrl,
         Name: item.FullName,
@@ -81,8 +82,6 @@ export default {
       }))
     }
   },
-  created() {
-    this.formatDataToTabel()
-  },
+
 };
 </script>

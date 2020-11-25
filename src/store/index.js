@@ -5,6 +5,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    test:'TEST FROM STORE'
+  },
+  getters:{
+    test: state => state.test
   },
   mutations: {
   },

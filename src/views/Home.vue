@@ -1,6 +1,9 @@
 <template>
   <div class="home">
-    <coins-tabel :coinsList="coinsList"/>
+    <div v-if="coinsList" >
+      <coins-tabel :coinsList="coinsList"/>
+
+    </div>
   </div>
 </template>
 
@@ -8,12 +11,19 @@
 import axios from "axios"
 import HelloWorld from "@/components/HelloWorld.vue";
 import CoinsTabel from "@/components/CoinsTabel";
-
+const KEY = '50e081a896903ee4c80ba4e38bcc4073b4aa22473f8d460a3d05039ee37310c8'
+const ccStreamer = new WebSocket('wss://streamer.cryptocompare.com/v2?api_key=' + KEY);
+import { mapGetters } from "vuex";
 export default {
   name: "Home",
   components: {
     HelloWorld,
     CoinsTabel
+  },
+  computed: {
+    ...mapGetters([
+      'test',
+    ])
   },
   data() {
     return {
@@ -41,7 +51,6 @@ export default {
       }
     },
     initialData() {
-      const ccStreamer = new WebSocket('wss://streamer.cryptocompare.com/v2?api_key=' + this.KEY);
       const v = this
       ccStreamer.onopen = function onStreamOpen() {
         const subRequest = {
@@ -63,6 +72,14 @@ export default {
   async created() {
     this.initialData();
     await this.getListCoins()
+    console.log('created')
+
+  },
+  destroyed(){
+        console.log('destroyed')
+  },
+  mounted() {
+    console.log('mounted')
   },
 };
 </script>
