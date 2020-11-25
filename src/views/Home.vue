@@ -11,8 +11,7 @@
 import axios from "axios"
 import HelloWorld from "@/components/HelloWorld.vue";
 import CoinsTabel from "@/components/CoinsTabel";
-const KEY = '50e081a896903ee4c80ba4e38bcc4073b4aa22473f8d460a3d05039ee37310c8'
-const ccStreamer = new WebSocket('wss://streamer.cryptocompare.com/v2?api_key=' + KEY);
+const ccStreamer = new WebSocket('wss://streamer.cryptocompare.com/v2?api_key=' + process.env.VUE_APP_API_KEY);
 import { mapGetters } from "vuex";
 export default {
   name: "Home",
@@ -28,7 +27,6 @@ export default {
   data() {
     return {
       KEY: '50e081a896903ee4c80ba4e38bcc4073b4aa22473f8d460a3d05039ee37310c8',
-      API_URL: "https://min-api.cryptocompare.com",
       coinsList: [],
       allData: {},
       items: [],
@@ -39,7 +37,7 @@ export default {
     async getListCoins() {
       const limit = "20"
       try {
-        const res = await axios.get(this.API_URL + `/data/top/mktcapfull?limit=${limit}&tsym=USD`, {})
+        const res = await axios.get(process.env.VUE_APP_API_URL + `/data/top/mktcapfull?limit=${limit}&tsym=USD`, {})
         this.coinsList = res.data.Data.map(coin => coin.CoinInfo)
         const paramsName = this.coinsList.map(coin => coin.Name)
         this.paramsCoinsWS = paramsName.map(param => ({
@@ -72,14 +70,11 @@ export default {
   async created() {
     this.initialData();
     await this.getListCoins()
-    console.log('created')
 
   },
   destroyed(){
-        console.log('destroyed')
   },
   mounted() {
-    console.log('mounted')
   },
 };
 </script>

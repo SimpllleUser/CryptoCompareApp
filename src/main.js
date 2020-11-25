@@ -8,7 +8,11 @@ Vue.use(IconsPlugin)
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.config.productionTip = false
+var dotenv = require('dotenv')
+var dotenvExpand = require('dotenv-expand')
 
+var myEnv = dotenv.config()
+dotenvExpand(myEnv)
 new Vue({
   router,
   store,

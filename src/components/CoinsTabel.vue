@@ -18,7 +18,6 @@ export default {
   props: ['coinsList'],
   watch: {
     coinsList: function (val) {
-      console.log('val',val)
       this.formatDataToTabel()
     }
   },
@@ -75,10 +74,10 @@ export default {
         icon:item.ImageUrl,
         Name: item.FullName,
         Value: item.Name,
-        Price: item.value['PRICE'] || ' ~ ',
-        'Volume 24h': item.value['VOLUME24HOUR'] || ' ~ ',
-        'Top tier volume 24h': item.value['TOPTIERVOLUME24HOUR'] || ' ~ ',
-        'Currency': item.value['TOSYMBOL']
+        Price: item?.value?.PRICE || ' ~ ',
+        'Volume 24h': item.value?.VOLUME24HOUR || ' ~ ',
+        'Top tier volume 24h': item.value?.TOPTIERVOLUME24HOUR || ' ~ ',
+        'Currency': item.value?.TOSYMBOL
       }))
     }
   },
