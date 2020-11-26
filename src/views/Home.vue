@@ -2,7 +2,6 @@
   <div class="home">
     <div v-if="coinsList" >
       <coins-tabel :coinsList="coinsList"/>
-
     </div>
   </div>
 </template>
@@ -11,7 +10,7 @@
 import axios from "axios"
 import HelloWorld from "@/components/HelloWorld.vue";
 import CoinsTabel from "@/components/CoinsTabel";
-const ccStreamer = new WebSocket('wss://streamer.cryptocompare.com/v2?api_key=' + process.env.VUE_APP_API_KEY);
+var ccStreamerHome = new WebSocket('wss://streamer.cryptocompare.com/v2?api_key=' + process.env.VUE_APP_API_KEY);
 import { mapGetters } from "vuex";
 export default {
   name: "Home",
@@ -50,14 +49,14 @@ export default {
     },
     initialData() {
       const v = this
-      ccStreamer.onopen = function onStreamOpen() {
+      ccStreamerHome.onopen = function onStreamOpen() {
         const subRequest = {
           "action": "SubAdd",
           "subs": v.paramsCoinsWS.map(param => param.paramItem)
         };
-        ccStreamer.send(JSON.stringify(subRequest));
+        ccStreamerHome.send(JSON.stringify(subRequest));
       }
-      ccStreamer.onmessage = function onStreamMessage(message) {
+      ccStreamerHome.onmessage = function onStreamMessage(message) {
         v.allData = message.data
         let coinMame = JSON.parse(v.allData)['FROMSYMBOL']
         if (coinMame) {
@@ -70,9 +69,15 @@ export default {
   async created() {
     this.initialData();
     await this.getListCoins()
-
+    if(!this.coinsList){
+      alert()
+       ccStreamerHome = new WebSocket('wss://streamer.cryptocompare.com/v2?api_key=' + process.env.VUE_APP_API_KEY);
+    }
   },
   destroyed(){
+    ccStreamerHome.onclose = function(){
+ccStreamerHome = null
+    }
   },
   mounted() {
   },

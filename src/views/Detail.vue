@@ -5,7 +5,7 @@
   </div>
 </template>
 <script>
-const ccStreamer = new WebSocket(
+var ccStreamerDetail = new WebSocket(
   "wss://streamer.cryptocompare.com/v2?api_key=" + process.env.VUE_APP_API_KEY
 );
 export default {
@@ -19,15 +19,15 @@ export default {
   methods: {
     initialData() {
       const v = this;
-      ccStreamer.onopen = function onStreamOpen() {
+      ccStreamerDetail.onopen = function onStreamOpen() {
         var subRequest = {
           action: "SubAdd",
           subs: [`24~CCCAGG~${v.$route.params.name_coin}~USD~m`],
         };
-        ccStreamer.send(JSON.stringify(subRequest));
+        ccStreamerDetail.send(JSON.stringify(subRequest));
       };
 
-      ccStreamer.onmessage = function onStreamMessage(message) {
+      ccStreamerDetail.onmessage = function onStreamMessage(message) {
         let dataCoint = JSON.parse(message.data);
         if (dataCoint.TS){
           v.allData.push([
@@ -161,6 +161,14 @@ export default {
   },
   created() {
     this.initialData();
+    if(!this.allData){
+ccStreamerDetail = new WebSocket(
+  "wss://streamer.cryptocompare.com/v2?api_key=" + process.env.VUE_APP_API_KEY
+)
+    }
   },
+  destroyed(){
+    ccStreamerDetail.close()
+  }
 };
 </script>
