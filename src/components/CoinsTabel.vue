@@ -3,7 +3,7 @@
     <b-table striped hover :items="itemsCoin" :fields="fields">
       <template v-slot:cell(Name)="data">
         {{ data.item.Name }}
-<!--        <router-link :to="'detail/'+data.item.Value">{{ data.item.Name}}</router-link>-->
+       <router-link :to="'detail/'+data.item.Value">{{ data.item.Name}}</router-link>
       </template>
       <template v-slot:cell(icon)="data">
         <img :src="'https://www.cryptocompare.com' + data.item.icon " alt="icon" width="35" height="35"/>
