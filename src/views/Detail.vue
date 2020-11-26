@@ -1,7 +1,7 @@
 <template>
   <div class="about">
-    <h1>This is an Detail page</h1>
-    <!-- <div id="container" class="chart"></div> -->
+    <h1>This is an detail page {{ $route.params.name_coin }} </h1>
+    <div id="container" class="chart"></div>
   </div>
 </template>
 <script>
@@ -22,14 +22,13 @@ export default {
       ccStreamer.onopen = function onStreamOpen() {
         var subRequest = {
           action: "SubAdd",
-          subs: ["24~CCCAGG~BTC~USD~D"],
+          subs: [`24~CCCAGG~${v.$route.params.name_coin}~USD~m`],
         };
         ccStreamer.send(JSON.stringify(subRequest));
       };
 
       ccStreamer.onmessage = function onStreamMessage(message) {
         let dataCoint = JSON.parse(message.data);
-        console.log(dataCoint);
         if (dataCoint.TS){
           v.allData.push([
             dataCoint.TS,
@@ -45,7 +44,6 @@ export default {
       };
     },
     initHighChart(allData, allVolume) {
-      console.log("!!! allVolume", allVolume);
       var data = allData;
       var ohlc = []
       var volume = allVolume
@@ -84,11 +82,9 @@ export default {
             if (point.isHeader) {
               position = {
                 x: Math.max(
-                  // Left side limit
                   chart.plotLeft,
                   Math.min(
                     point.plotX + chart.plotLeft - width / 2,
-                    // Right side limit
                     chart.chartWidth - width - chart.marginRight
                   )
                 ),
@@ -154,7 +150,7 @@ export default {
                     },
                   ],
                   inputEnabled: false,
-                  selected: 4, // all
+                  selected: 4,
                 },
               },
             },
